@@ -1,5 +1,6 @@
 package com.br.escoladeti.prova.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -11,6 +12,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Data
@@ -29,5 +31,7 @@ public class Destino {
   @ManyToOne
   @JoinColumn
   @NotNull
+  @ToString.Exclude
+  @JsonBackReference
   private Viagem viagem;
 }

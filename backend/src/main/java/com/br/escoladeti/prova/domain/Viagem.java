@@ -1,5 +1,6 @@
 package com.br.escoladeti.prova.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -15,6 +16,7 @@ import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Data
@@ -40,6 +42,8 @@ public class Viagem {
   private BigDecimal valor;
 
   @OneToMany(mappedBy = "viagem", cascade = CascadeType.ALL, orphanRemoval = true)
+  @ToString.Exclude
+  @JsonManagedReference
   private List<Destino> destinos;
 
 }

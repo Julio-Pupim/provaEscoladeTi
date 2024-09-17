@@ -2,6 +2,7 @@ package com.br.escoladeti.prova.service;
 
 import com.br.escoladeti.prova.domain.Destino;
 import com.br.escoladeti.prova.domain.Viagem;
+import com.br.escoladeti.prova.repository.DestinoRepository;
 import com.br.escoladeti.prova.repository.ViagemRepository;
 import java.util.List;
 import java.util.Objects;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 public class ViagemService {
 
   private final ViagemRepository viagemRepository;
+  private final DestinoRepository destinoRepository;
 
   public Viagem save(Viagem viagemSave) {
     return this.viagemRepository.save(viagemSave);
@@ -42,12 +44,16 @@ public class ViagemService {
     this.viagemRepository.deleteById(id);
   }
 
-  public Viagem removerDestino(Viagem viagem, Destino destino) {
-    viagem.getDestinos().remove(destino);
+  public Viagem removerDestino(Viagem viagem, Long idDestino) {
+    Destino optionalDestino = destinoRepository.findById(idDestino).orElse(null);
+    viagem.getDestinos().remove(optionalDestino);
+    destinoRepository.deleteById(idDestino);
     return viagem;
   }
 
   public Viagem adicionaDestino(Viagem viagem, Destino destino) {
+    destino.setViagem(viagem);
+    destinoRepository.save(destino);
     viagem.getDestinos().add(destino);
     return viagem;
   }

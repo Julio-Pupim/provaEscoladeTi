@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -58,24 +59,22 @@ public class ViagemController {
     return ResponseEntity.notFound().build();
   }
 
-  @PutMapping("/adicionar-destino/{idViagem}/{idDestino}")
-  public ResponseEntity<Viagem> adicionarDestino(@PathVariable("idViagem") Long idViagem,
-      @PathVariable("idDestino") Long idDestino) {
-    Destino destino = destinoService.findById(idDestino).orElse(null);
-    Viagem viagem = viagemService.findById(idViagem).orElse(null);
-    if (Objects.nonNull(destino) && Objects.nonNull(viagem)) {
+  @PatchMapping("/{id}/inserir-destino")
+  public ResponseEntity<Viagem> adicionarDestino(@PathVariable("id") Long id,
+      @RequestBody Destino destino) {
+    Viagem viagem = viagemService.findById(id).orElse(null);
+    if (Objects.nonNull(viagem)) {
       return ResponseEntity.ok(viagemService.adicionaDestino(viagem, destino));
     }
     return ResponseEntity.notFound().build();
   }
 
-  @PutMapping("/remover-destino/{idViagem}/{idDestino}")
-  public ResponseEntity<Viagem> removerDestino(@PathVariable("idViagem") Long idViagem,
+  @PatchMapping("/{idViagem}/remover-destino/{idDestino}")
+  public ResponseEntity<Viagem> removerDestino(@PathVariable("idViagem") Long id,
       @PathVariable("idDestino") Long idDestino) {
-    Destino destino = destinoService.findById(idDestino).orElse(null);
-    Viagem viagem = viagemService.findById(idViagem).orElse(null);
-    if (Objects.nonNull(destino) && Objects.nonNull(viagem)) {
-      return ResponseEntity.ok(viagemService.removerDestino(viagem, destino));
+    Viagem viagem = viagemService.findById(id).orElse(null);
+    if (Objects.nonNull(viagem)) {
+      return ResponseEntity.ok(viagemService.removerDestino(viagem, idDestino));
     }
     return ResponseEntity.notFound().build();
   }
