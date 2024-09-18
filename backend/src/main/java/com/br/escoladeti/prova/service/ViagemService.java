@@ -45,9 +45,11 @@ public class ViagemService {
   }
 
   public Viagem removerDestino(Viagem viagem, Long idDestino) {
-    Destino optionalDestino = destinoRepository.findById(idDestino).orElse(null);
-    viagem.getDestinos().remove(optionalDestino);
-    destinoRepository.deleteById(idDestino);
+    destinoRepository.findById(idDestino).ifPresent(
+        destino -> {
+          viagem.getDestinos().remove(destino);
+          destinoRepository.delete(destino);
+        });
     return viagem;
   }
 
